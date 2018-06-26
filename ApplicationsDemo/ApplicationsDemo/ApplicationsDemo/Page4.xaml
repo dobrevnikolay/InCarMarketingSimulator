@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ApplicationsDemo.Page4"
+             BackgroundImage="@drawable/page4.jpg">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                <Button Text="Next Page" Clicked="Button_OnClicked"/>
+                <Button Text="Previous Page" Clicked="PrevButton_OnClicked"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
