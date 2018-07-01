@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core;
+using Emgu.CV.CvEnum;
 
 namespace CoreTest
 {
@@ -19,19 +20,24 @@ namespace CoreTest
             _returnFalse = returnFalse;
         }
 
-        public bool IsPatternInThePic(Bitmap picture, Bitmap pattern)
+        public Pattern FindMatch(List<Pattern> patterns, byte[] screen)
         {
+            if (0 == patterns.Capacity)
+            {
+                return null;
+            }
+
             if (_returnFalse)
             {
-                return false;
+                return null;
             }
 
             _counter++;
             if (0 == _counter % 2)
             {
-                return true;
+                return patterns[0];
             }
-            return false;
+            return null;
         }
     }
 }

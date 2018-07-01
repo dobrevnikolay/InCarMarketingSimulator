@@ -71,6 +71,7 @@ namespace InCarGUI
 
         private void ForceAdCreation()
         {
+            //get from database and print
             throw new NotImplementedException();
         }
 
@@ -79,7 +80,7 @@ namespace InCarGUI
             try
             {
                 var patternMatcher = new OpenCvPatternMatcher();
-                var mongodb = new MongoDB("InCarMarketing", "InCarMarketingScreen");
+                var mongodb = new MongoDataBase("InCarMarketing", "InCarMarketingScreen");
                 ScreenAnalyzer sa = new ScreenAnalyzer(mongodb, patternMatcher);
                 await sa.AnalyzeScreenAsync(_screenPictureBitmap);
                 var results = ScreenAnalyzer.AnalyzeResults;

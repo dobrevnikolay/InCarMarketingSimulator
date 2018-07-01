@@ -9,13 +9,15 @@ using MongoDB.Driver.GridFS;
 
 namespace Core
 {
-    public class MongoDB : IDataProvider, IDataBaseFiller
+    public class MongoDataBase : IDataProvider, IDataBaseFiller
     {
 
         #region Private members
-
+        
         private class Occurance
         {
+            public MongoDB.Bson.ObjectId Id { get; set; }
+
             public string PatternName { get; set; }
 
             public bool IsObserved { get; set; }
@@ -32,8 +34,9 @@ namespace Core
 
         #region Constructor
 
-        public MongoDB(string dataBaseName, string screenDataBaseName)
+        public MongoDataBase(string dataBaseName, string screenDataBaseName)
         {
+            //client with a default localhost and port #27017
             _client = new MongoClient();
             _database = _client.GetDatabase(dataBaseName);
             _bucket = new GridFSBucket(_database);
@@ -76,7 +79,7 @@ namespace Core
 
             var collection = _database.GetCollection<Occurance>("UserActivity");
 
-            var documents = await collection.Find(a => true).ToListAsync();
+            var documents = await collection.Find(_ => true).ToListAsync();
 
             //var documents = collection.AsQueryable();
 
