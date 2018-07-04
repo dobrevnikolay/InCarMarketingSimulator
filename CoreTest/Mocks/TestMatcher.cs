@@ -11,8 +11,9 @@ namespace CoreTest
 {
     class TestMatcher : IPatternMatcher
     {
-        private int _counter;
+        public int _counter;
         private bool _returnFalse;
+        public int _indexOfPattern;
 
         public TestMatcher(bool returnFalse = false)
         {
@@ -22,7 +23,7 @@ namespace CoreTest
 
         public Pattern FindMatch(List<Pattern> patterns, byte[] screen)
         {
-            if (0 == patterns.Capacity)
+            if (0 == patterns.Count)
             {
                 return null;
             }
@@ -35,7 +36,7 @@ namespace CoreTest
             _counter++;
             if (0 == _counter % 2)
             {
-                return patterns[0];
+                return patterns[_indexOfPattern];
             }
             return null;
         }

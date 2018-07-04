@@ -10,8 +10,6 @@ namespace Core
 {
     public class ScreenAnalyzer
     {
-        //only for debug
-        public static Dictionary<string, bool> AnalyzeResults;
 
         private IDataProvider _dataBase;
         private IPatternMatcher _patternMatcher;

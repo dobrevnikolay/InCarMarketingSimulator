@@ -27,7 +27,6 @@ namespace Core
 
         public Pattern FindMatch(List<Pattern> patterns, byte[] screen)
         {
-            Pattern match = new Pattern();
 
             List<Pattern> matches = new List<Pattern>();
 
@@ -43,33 +42,32 @@ namespace Core
                 
             }
 
-            if (!(1 < matches.Count))
+            if (1 == matches.Count)
             {
-                match = matches[0];
+                return matches[0];
             }
-            else
+            else if (1 < matches.Count)
             {
                 //perform another check with different matching type
                 foreach (var pattern in matches)
                 {
-                    bool matchDetected = this.MatchPatternInPicture(BitmapByteConverter.ConvertByteArrayToBitmap(screen),
-                        BitmapByteConverter.ConvertByteArrayToBitmap(pattern.ImageBytes), TemplateMatchingType.CcorrNormed);
+                    bool matchDetected = this.MatchPatternInPicture(
+                        BitmapByteConverter.ConvertByteArrayToBitmap(screen),
+                        BitmapByteConverter.ConvertByteArrayToBitmap(pattern.ImageBytes),
+                        TemplateMatchingType.CcorrNormed);
                     if (!matchDetected)
                     {
                         matches.Remove(pattern);
                     }
                 }
             }
-
-            if (0 == matches.Capacity)
+            else
             {
                 return null;
             }
 
             //If there is still more than one match get first one
-            match = matches[0];
-
-            return match;
+            return matches[0];
         }
 
 

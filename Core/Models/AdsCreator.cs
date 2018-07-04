@@ -16,28 +16,33 @@ namespace Core.Models
             _dataBase = dataBase;
         }
 
-        public List<string> CreateAd(string GPS)
+        public string CreateAd(string GPS)
         {
 
             var userActivity = _dataBase.GetUserActivity();
 
             var keys = new List<string>(userActivity.Keys);
 
-            List<string> results = new List<string>();
+            string result = string.Empty;
 
             foreach (var key in keys)
             {
-                string ad= string.Empty;
-                if (_geoInfoProvider.IsNearby(key, GPS, out ad))
+                
+                if (userActivity[key])
                 {
-                    results.Add(ad);
-                    userActivity[key] = false;
+                    if (_geoInfoProvider.IsNearby(key, GPS, out result))
+                    {
+                        userActivity[key] = false;
+                        break;
+
+                    }
                 }
+
             }
 
             _dataBase.UpdateUserActivity(userActivity);
 
-            return results;
+            return result;
         }
     }
 }

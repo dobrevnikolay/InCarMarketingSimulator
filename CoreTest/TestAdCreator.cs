@@ -22,19 +22,6 @@ namespace CoreTest
 
         }
 
-        [Test]
-        public void AdCreator_ActiveUserActivity_TwoResults()
-        {
-            var geo = new MockGeoProvider(true);
-            var database = new DataProvider();
-
-            AdsCreator adCreator = new AdsCreator(geo, database);
-
-            var result = adCreator.CreateAd("GPS");
-
-            Assert.That(result.Count, Is.Not.Zero);
-        }
-
 
         [Test]
         public void AdCreator_ActiveUserActivity_ValidString()
@@ -42,17 +29,19 @@ namespace CoreTest
             var geo = new MockGeoProvider(true);
             var database = new DataProvider();
 
-            var compareWith = "Hey you have interest in...";
+            var compareWith = "There is bmw dealership in 1km";
 
             geo.SetResult(compareWith);
 
             AdsCreator adCreator = new AdsCreator(geo, database);
 
+            database.GetUserActivity()["bmw"] = true;
+
             var result = adCreator.CreateAd("GPS");
 
-            Assert.That(result.Count, Is.Not.Zero);
+            Assert.That(result, Is.Not.Null);
 
-            var equality = result[0].Equals(compareWith);
+            var equality = result.Equals(compareWith);
 
             Assert.That(equality, Is.True);
 
@@ -72,9 +61,6 @@ namespace CoreTest
 
             database.UpdateUserActivity(userAct);
 
-            userAct["bmw"] = false;
-            userAct["ryanair"] = false;
-
             var compareWith = "Hey you have interest in...";
 
             geo.SetResult(compareWith);
@@ -83,9 +69,12 @@ namespace CoreTest
 
             var result = adCreator.CreateAd("GPS");
 
-            Assert.That(result.Count, Is.Not.Zero);
+            Assert.That(result, Is.Not.Empty);
 
-            var equality = result[0].Equals(compareWith);
+            userAct["bmw"] = false;
+            userAct["ryanair"] = false;
+
+            var equality = result.Equals(compareWith);
 
             var updatedUserAct = database.GetUserActivity();
 

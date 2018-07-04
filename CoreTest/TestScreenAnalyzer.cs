@@ -141,6 +141,9 @@ namespace CoreTest
                 {"ryanair",true }
             };
 
+            matcher._counter = 1;
+            matcher._indexOfPattern = 1;
+
             sa.AnalyzeScreenAsync(pic);
 
             var result = dataBase.GetUserActivity();

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Core;
+using Core.Models;
 using Microsoft.Win32;
 
 namespace InCarGUI
@@ -16,6 +17,12 @@ namespace InCarGUI
         private Bitmap _screenPictureBitmap;
 
         private string _patternSearchResult;
+
+        private readonly IDataProvider _database;
+
+        private readonly IPatternMatcher _patternMatcher;
+
+        private IGeoInfoProvider _geoInfoProvider;
 
         #endregion
 
@@ -67,24 +74,30 @@ namespace InCarGUI
             PathToImageToShow = @"Images/Img.jpg";
             PathToBackgroundImg = @"Images/backGround.jpg";
             ProgramLogo = @"Images/logo.png";
+
+            _database = new MongoDataBase("InCarMarketing", "InCarMarketingScreen");
+            _patternMatcher = new OpenCvPatternMatcher();
+            _geoInfoProvider = new GoogleMapsInfoProvider();
+            
         }
 
         private void ForceAdCreation()
         {
             //get from database and print
-            throw new NotImplementedException();
+            var adcreator = new AdsCreator(_geoInfoProvider, _database);
+
+            var result = adcreator.CreateAd("none");
+
+            PatternSearchResult = result;
         }
 
         private async Task FindPatternsAsync()
         {
             try
             {
-                var patternMatcher = new OpenCvPatternMatcher();
-                var mongodb = new MongoDataBase("InCarMarketing", "InCarMarketingScreen");
-                ScreenAnalyzer sa = new ScreenAnalyzer(mongodb, patternMatcher);
+                
+                ScreenAnalyzer sa = new ScreenAnalyzer(_database, _patternMatcher);
                 await sa.AnalyzeScreenAsync(_screenPictureBitmap);
-                var results = ScreenAnalyzer.AnalyzeResults;
-                PatternSearchResult = results.ToString();
             }
             catch (Exception e)
             {
